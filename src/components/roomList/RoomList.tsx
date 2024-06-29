@@ -14,6 +14,7 @@ export default function RoomList() {
   const [checkAllAvailabilities, setCheckAllAvailabilities] = useState(false);
   const [uncheckAllAvailabilities, setUncheckAllAvailabilities] =
     useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     if (uncheckAllAvailabilities) setCheckAllAvailabilities(false);
@@ -39,9 +40,14 @@ export default function RoomList() {
     }
     return 0;
   });
-
+  const itemsPerPage = 4;
   const numberOfPages = Math.ceil(sortedRooms.length / 4);
-
+  // Function to paginate the rooms
+  const paginateRooms = (page: number) => {
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return sortedRooms.slice(startIndex, endIndex);
+  };
   return (
     <>
       <RoomListActions
@@ -51,7 +57,7 @@ export default function RoomList() {
         setCheckAllAvailabilities={handleCheckAllAvailabilities}
       />
       <List>
-        {sortedRooms?.map((room) => (
+        {paginateRooms(currentPage).map((room) => (
           <Room
             room={room}
             key={room.id}
@@ -60,7 +66,11 @@ export default function RoomList() {
           />
         ))}
       </List>
-      <RoomPagination count={numberOfPages} />
+      <RoomPagination
+        count={numberOfPages}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
     </>
   );
 }

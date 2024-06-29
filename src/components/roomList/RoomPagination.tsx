@@ -2,6 +2,8 @@ import { Pagination, styled } from "@mui/material";
 
 interface Props {
   count: number;
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
 }
 
 const StyledPagination = styled(Pagination)({
@@ -10,6 +12,22 @@ const StyledPagination = styled(Pagination)({
   },
 });
 
-export default function RoomPagination({ count }: Props) {
-  return <StyledPagination count={count} />;
+export default function RoomPagination({
+  count,
+  currentPage,
+  setCurrentPage,
+}: Props) {
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setCurrentPage(page);
+  };
+  return (
+    <StyledPagination
+      count={count}
+      page={currentPage}
+      onChange={handlePageChange}
+    />
+  );
 }

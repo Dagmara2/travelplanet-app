@@ -47,13 +47,16 @@ export default function Room({
         price={
           checkAvailability && data?.availabilityStatus === "available" ? (
             <>
+              {data?.price.value} {data?.price.currencyCode}
               <Typography
                 variant="caption"
-                sx={{ textDecoration: "line-through", mr: "1rem" }}
+                fontSize="1rem"
+                fontWeight={700}
+                sx={{ ml: "1rem" }}
               >
-                {room.price.value} {room.price.currencyCode}
+                Discount: {room.price.value - data?.price.value}{" "}
+                {room.price.currencyCode}
               </Typography>
-              {data?.price.value} {data?.price.currencyCode}
             </>
           ) : (
             `${room.price.value} ${room.price.currencyCode}`

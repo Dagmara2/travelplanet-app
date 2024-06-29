@@ -29,7 +29,7 @@ export const roomsApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (builder) => ({
     getRooms: builder.query<RoomProps[], void>({
-      query: () => `/rooms`,
+      query: () => `/rooms?page=2`,
     }),
     getRoomById: builder.query<RoomAvailabilityProps, string>({
       query: (id) => `/room/${id}`,
