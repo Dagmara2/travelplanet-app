@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 import Sorting, { SortTypes } from "./Sorting";
-import CheckboxControl from "../checkboxControl";
+import CheckboxControl from "../../ui/checkboxControl/CheckboxControl";
 
 interface Props {
   sortCriteria: SortTypes;

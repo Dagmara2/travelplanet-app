@@ -1,9 +1,12 @@
 import { ListItem, Typography, styled } from "@mui/material";
-import { RoomProps, useGetRoomByIdQuery } from "../../api";
+import { RoomProps, useGetRoomByIdQuery } from "../../../api";
 import { useEffect, useState } from "react";
 import RoomHeader from "./RoomHeader";
 import BookButton from "./BookButton";
 import RoomAvailability from "./RoomAvailability";
+import RoomPrice from "./RoomPrice";
+import Loading from "../../ui/loading";
+import ErrorMessage from "../../ui/errorMessage";
 
 interface Props {
   room: RoomProps;
@@ -25,7 +28,7 @@ export default function Room({
   checkAllAvailabilities,
   setUncheckAllAvailabilities,
 }: Props) {
-  const { data } = useGetRoomByIdQuery(room.id);
+  const { data, error, isLoading, refetch } = useGetRoomByIdQuery(room.id);
   const [checkAvailability, setCheckAvailability] = useState(
     checkAllAvailabilities
   );
@@ -34,6 +37,9 @@ export default function Room({
   useEffect(() => {
     if (checkAllAvailabilities) setCheckAvailability(true);
   }, [checkAllAvailabilities]);
+
+  if (isLoading) return <Loading />;
+  if (error) return <ErrorMessage onTryAgainClick={refetch} />;
 
   const handleOnChange = (val: boolean) => {
     if (!val) setUncheckAllAvailabilities(true);
@@ -45,22 +51,11 @@ export default function Room({
       <RoomHeader
         name={room.name}
         price={
-          checkAvailability && data?.availabilityStatus === "available" ? (
-            <>
-              {data?.price.value} {data?.price.currencyCode}
-              <Typography
-                variant="caption"
-                fontSize="1rem"
-                fontWeight={700}
-                sx={{ ml: "1rem" }}
-              >
-                Discount: {room.price.value - data?.price.value}{" "}
-                {room.price.currencyCode}
-              </Typography>
-            </>
-          ) : (
-            `${room.price.value} ${room.price.currencyCode}`
-          )
+          <RoomPrice
+            room={room}
+            data={data}
+            checkAvailability={checkAvailability}
+          />
         }
       />
       <BookButton

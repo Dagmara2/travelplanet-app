@@ -1,12 +1,16 @@
 import { List } from "@mui/material";
-import { useGetRoomsQuery } from "../../api";
+import { useGetRoomsQuery } from "../../../api";
 import Room from "../room";
-import Loading from "../loading";
-import { useEffect, useState } from "react";
+import Loading from "../../ui/loading";
+import { useEffect, useMemo, useState } from "react";
 import { SortTypes } from "./Sorting";
 import RoomListActions from "./RoomListActions";
-import ErrorMessage from "../errorMessage";
+import ErrorMessage from "../../ui/errorMessage";
 import RoomPagination from "./RoomPagination";
+import { sortRooms } from "../../../utils/sortRooms";
+import { pagination } from "../../../utils/pagination";
+
+const ITEMS_PER_PAGE = 4;
 
 export default function RoomList() {
   const { data, isLoading, error, refetch } = useGetRoomsQuery();
@@ -25,29 +29,16 @@ export default function RoomList() {
     if (val) setUncheckAllAvailabilities(false);
   };
 
-  if (isLoading) return <Loading />;
-  if (error) <ErrorMessage refetch={refetch} />;
+  const sortedRooms = useMemo(
+    () => sortRooms(data || [], sortCriteria),
+    [data, sortCriteria]
+  );
 
-  const sortedRooms = [...(data ?? [])].sort((a, b) => {
-    if (sortCriteria === "nameAZ") {
-      return a.name.localeCompare(b.name);
-    } else if (sortCriteria === "nameZA") {
-      return b.name.localeCompare(a.name);
-    } else if (sortCriteria === "priceAsc") {
-      return a.price.value - b.price.value;
-    } else if (sortCriteria === "priceDesc") {
-      return b.price.value - a.price.value;
-    }
-    return 0;
-  });
-  const itemsPerPage = 4;
+  if (isLoading) return <Loading />;
+  if (error) return <ErrorMessage onTryAgainClick={refetch} />;
+
   const numberOfPages = Math.ceil(sortedRooms.length / 4);
-  // Function to paginate the rooms
-  const paginateRooms = (page: number) => {
-    const startIndex = (page - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return sortedRooms.slice(startIndex, endIndex);
-  };
+  const paginatedRooms = pagination(sortedRooms, currentPage, ITEMS_PER_PAGE);
   return (
     <>
       <RoomListActions
@@ -57,7 +48,7 @@ export default function RoomList() {
         setCheckAllAvailabilities={handleCheckAllAvailabilities}
       />
       <List>
-        {paginateRooms(currentPage).map((room) => (
+        {paginatedRooms.map((room) => (
           <Room
             room={room}
             key={room.id}

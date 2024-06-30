@@ -1,6 +1,6 @@
 import { Stack, Typography, styled } from "@mui/material";
-import CheckboxControl from "../checkboxControl";
-import { AvailabilityStatus } from "../../api";
+import { AvailabilityStatus } from "../../../api";
+import CheckboxControl from "../../ui/checkboxControl/CheckboxControl";
 
 interface Props {
   checkIfAvailable: boolean;

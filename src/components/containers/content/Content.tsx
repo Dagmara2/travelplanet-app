@@ -1,7 +1,7 @@
-import { styled } from "@mui/material";
-import RoomList from "../roomList";
+import { Box, styled } from "@mui/material";
+import RoomList from "../../views/roomList";
 
-const StyledMain = styled("main")({
+const StyledMain = styled(Box)({
   padding: "1.25rem",
   maxWidth: "1600px",
   margin: "auto",
@@ -9,7 +9,7 @@ const StyledMain = styled("main")({
 
 export default function Content() {
   return (
-    <StyledMain>
+    <StyledMain component="main">
       <RoomList />
     </StyledMain>
   );
