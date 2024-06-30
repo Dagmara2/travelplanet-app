@@ -11,6 +11,7 @@ export default function BookButton({ disabled, message }: Props) {
       disabled={disabled}
       sx={{ ml: "auto" }}
       onClick={() => console.log(message)}
+      variant="contained"
     >
       Book
     </Button>

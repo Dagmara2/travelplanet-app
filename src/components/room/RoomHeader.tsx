@@ -8,7 +8,9 @@ interface Props {
 export default function RoomHeader({ name, price }: Props) {
   return (
     <>
-      <Typography variant="h6">{name}</Typography>
+      <Typography variant="h6" fontWeight={600}>
+        {name}
+      </Typography>
       <Typography variant="subtitle1">{price}</Typography>
     </>
   );
