@@ -3,10 +3,10 @@ import Content from "./components/containers/content/Content";
 
 function App() {
   return (
-    <div>
+    <>
       <Header />
       <Content />
-    </div>
+    </>
   );
 }
 
